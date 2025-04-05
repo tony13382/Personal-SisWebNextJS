@@ -5,6 +5,7 @@ const NOTION_VERSION = '2021-05-13'
 const NOTION_TOKEN = "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"
 const TAG_DB_ID = '1cb57efa8a9b80bf8b19e630f0875c38'
 
+// 取得標籤 ID 對應文字
 async function fetchTagTypeMap() {
     const res = await fetch(`${NOTION_API}/databases/${TAG_DB_ID}/query`, {
         method: 'POST',
@@ -27,17 +28,21 @@ async function fetchTagTypeMap() {
     return typeMap
 }
 
-export async function GET(
-    req: NextRequest,
-    { params }: { params: { id: string } }
-) {
-    const page_id = params.id
-    if (!page_id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 })
+export async function GET(request: NextRequest) {
+    // ✅ 從 URL 中提取 id，避免使用 params
+    const pathname = new URL(request.url).pathname
+    const id = pathname.split('/').pop() // e.g. /api/comics/[id]
+
+    if (!id) {
+        return NextResponse.json({ error: 'Missing ID' }, { status: 400 })
+    }
+
+    const page_id = id
 
     try {
         const typeMap = await fetchTagTypeMap()
 
-        // 取得頁面基本資訊
+        // 取得頁面基本資料
         const pageRes = await fetch(`${NOTION_API}/pages/${page_id}`, {
             headers: {
                 Authorization: `Bearer ${NOTION_TOKEN}`,
@@ -49,8 +54,7 @@ export async function GET(
         const title = pageData.properties.name.title?.[0]?.text?.content || ''
         const tagIds = pageData.properties.tags.relation || []
         const tags = tagIds.map((tag: any) => typeMap[tag.id]).filter(Boolean)
-        const memo =
-            pageData.properties.memo.rich_text?.[0]?.text?.content || ''
+        const memo = pageData.properties.memo.rich_text?.[0]?.text?.content || ''
 
         // 取得圖片 blocks
         const blocksRes = await fetch(`${NOTION_API}/blocks/${page_id}/children`, {
@@ -72,7 +76,7 @@ export async function GET(
             imgs,
         })
     } catch (err) {
-        console.error(err)
+        console.error('Error fetching comic detail:', err)
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }
