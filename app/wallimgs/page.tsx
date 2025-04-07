@@ -64,7 +64,15 @@ export default function WallImgsPage() {
     .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen max-w-7xl mx-auto bg-gray-50 p-6">
+      {/* 返回按鈕 */}
+      <button
+        onClick={() => router.push('/home')}
+        className="mb-4 text-sm underline text-blue-600 hover:text-blue-800"
+      >
+        ← 返回頁面
+      </button>
+
       <h1 className="text-2xl font-bold mb-4">圖牆</h1>
 
       {/* Tag Buttons */}
@@ -74,8 +82,8 @@ export default function WallImgsPage() {
             key={tag}
             onClick={() => setActiveTag(tag)}
             className={`px-4 py-2 rounded-full text-sm ${activeTag === tag
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
               }`}
           >
             {tag}
@@ -100,16 +108,29 @@ export default function WallImgsPage() {
 
       {/* Modal for fullscreen preview */}
       {selectedImg && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
-          onClick={() => setSelectedImg(null)}
-        >
-          <img
-            src={selectedImg}
-            alt="Preview"
-            className="max-w-full max-h-full object-contain rounded"
-            onClick={(e) => e.stopPropagation()}
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          {/* 點擊背景關閉 */}
+          <div
+            className="absolute inset-0"
+            onClick={() => setSelectedImg(null)}
           />
+
+          {/* 圖片與關閉按鈕區域 */}
+          <div className="relative z-10">
+            {/* 關閉按鈕 */}
+            <button
+              onClick={() => setSelectedImg(null)}
+              className="absolute top-2 left-2 bg-white text-black rounded-full p-2 hover:bg-gray-200 shadow"
+            >
+              ✕
+            </button>
+
+            <img
+              src={selectedImg}
+              alt="Preview"
+              className="max-w-full max-h-screen object-contain rounded"
+            />
+          </div>
         </div>
       )}
     </div>

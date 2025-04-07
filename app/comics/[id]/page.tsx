@@ -33,7 +33,7 @@ export default function ComicDetailPage() {
     if (!data) return <div className="p-6">找不到漫畫資料</div>
 
     return (
-        <div className="min-h-screen bg-white p-6">
+        <div className="min-h-screen max-w-2xl mx-auto bg-gray-50 p-6">
             {/* 返回按鈕 */}
             <button
                 onClick={() => router.push('/comics')}
@@ -72,18 +72,32 @@ export default function ComicDetailPage() {
 
             {/* Modal 放大圖 */}
             {selectedImg && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
-                    onClick={() => setSelectedImg(null)}
-                >
-                    <img
-                        src={selectedImg}
-                        alt="放大圖片"
-                        className="max-w-full max-h-full object-contain rounded"
-                        onClick={(e) => e.stopPropagation()}
+                <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
+                    {/* 點背景區域關閉 */}
+                    <div
+                        className="absolute inset-0"
+                        onClick={() => setSelectedImg(null)}
                     />
+
+                    {/* Modal 內容 */}
+                    <div className="relative z-10">
+                        {/* 關閉按鈕 */}
+                        <button
+                            onClick={() => setSelectedImg(null)}
+                            className="absolute top-2 left-2 bg-white text-black rounded-full p-2 hover:bg-gray-200 shadow"
+                        >
+                            ✕
+                        </button>
+
+                        <img
+                            src={selectedImg}
+                            alt="放大圖片"
+                            className="max-w-full max-h-screen object-contain rounded"
+                        />
+                    </div>
                 </div>
             )}
+
         </div>
     )
 }

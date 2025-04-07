@@ -43,7 +43,14 @@ export default function ComicPage() {
   }, {})
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen max-w-4xl mx-auto bg-gray-50 p-6">
+      {/* 返回按鈕 */}
+      <button
+        onClick={() => router.push('/home')}
+        className="mb-4 text-sm underline text-blue-600 hover:text-blue-800"
+      >
+        ← 返回頁面
+      </button>
       <h1 className="text-2xl font-bold mb-4">漫畫分類</h1>
 
       {/* Tag Buttons */}
@@ -71,10 +78,12 @@ export default function ComicPage() {
             <h2 className="text-xl font-semibold mb-3">{folder}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {items.map(comic => (
-                <div
+                <a
+                  href={`/comics/${comic.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   key={comic.id}
-                  className="cursor-pointer"
-                  onClick={() => router.push(`/comics/${comic.id}`)}
+                  className="cursor-pointer block"
                 >
                   <img
                     src={comic.cover}
@@ -82,12 +91,13 @@ export default function ComicPage() {
                     className="w-full h-auto rounded shadow hover:scale-105 transition"
                   />
                   <p className="text-sm mt-1 text-center">{comic.title}</p>
-                </div>
+                </a>
               ))}
             </div>
           </div>
         ))
       )}
+
     </div>
   )
 }
