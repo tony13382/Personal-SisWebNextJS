@@ -101,7 +101,7 @@ export default function ComicDetailPage() {
 
             {/* next_id */}
             {data.next_id && (
-                <div className="mt-6">
+                <div className="mt-6 grid grid-cols-1 gap-4">
                     <button
                         onClick={() => router.push(`/comics/${data.next_id}`)}
                         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
