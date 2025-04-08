@@ -7,6 +7,7 @@ type ComicDetail = {
     tags: string[]
     memo?: string
     imgs: string[]
+    next_id?: string
 }
 
 export default function ComicDetailPage() {
@@ -98,6 +99,17 @@ export default function ComicDetailPage() {
                 </div>
             )}
 
+            {/* next_id */}
+            {data.next_id && (
+                <div className="mt-6">
+                    <button
+                        onClick={() => router.push(`/comics/${data.next_id}`)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                    >
+                        下一頁
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

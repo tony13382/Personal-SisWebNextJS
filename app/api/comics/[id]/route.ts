@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
         const tagIds = pageData.properties.tags.relation || []
         const tags = tagIds.map((tag: any) => typeMap[tag.id]).filter(Boolean)
         const memo = pageData.properties.memo.rich_text?.[0]?.text?.content || ''
+        const next_id = pageData.properties.next_id.rich_text?.[0]?.text?.content || ''
 
         // 取得圖片 blocks
         const blocksRes = await fetch(`${NOTION_API}/blocks/${page_id}/children`, {
@@ -74,6 +75,7 @@ export async function GET(request: NextRequest) {
             tags,
             memo,
             imgs,
+            next_id,
         })
     } catch (err) {
         console.error('Error fetching comic detail:', err)
